@@ -1,17 +1,18 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <cctype>
 using namespace std;
 
 int main(int argc, char** argv) {
     setlocale(LC_ALL, "Portuguese");
-    ifstream arq("lista1.txt");
+    ifstream arq("lista2.txt");
 
     string nome;
     string nomes[100];
     int i = 0;
 
-    ofstream arquivoSaida("saida1.txt"); 
+    ofstream arquivoSaida("saida2.txt"); 
 
     if (arq.is_open() && arquivoSaida.is_open()) {
         string linha;
@@ -23,15 +24,18 @@ int main(int argc, char** argv) {
                 i++;
             }
 
-            arquivoSaida << nomes[i - 1] << ", "; // escreve o último nome no arquivo de saída
-
-            for (int n = 0; n < i; ++n) {
-                if (n == 0) {
-                    arquivoSaida << nomes[n];
-                } else if (n != i - 1) {
-                    arquivoSaida << " " << nomes[n]; // adiciona espaço entre os nomes
-                }
+            for (int j = 0; j < i - 1; ++j) {
+                nomes[j][0] = toupper(nomes[j][0]); // transforma a primeira letra dos sobrenomes em maiúscula
             }
+
+            arquivoSaida << nomes[i - 1] << ", "; // escreve o último sobrenome no arquivo de saída
+
+            arquivoSaida << nomes[0]; // escreve o primeiro nome sem abreviação
+
+            for (int k = 1; k < i - 1; ++k) {
+                arquivoSaida << " " << nomes[k][0] << "."; // adiciona os nomes abreviados (exceto o último) seguidos de um ponto
+            }
+
             arquivoSaida << endl; // adiciona uma nova linha ao arquivo de saída
         }
         arq.close();
